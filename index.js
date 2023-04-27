@@ -6,7 +6,7 @@ import { info,
 import { getETHAmount,
     getGasPrice,
     sendEVMTX } from './tools/web3.js';
-import { subtract, multiply, divide, composition, add } from 'mathjs';
+import { subtract, multiply, divide, add } from 'mathjs';
 import fs from 'fs';
 import readline from 'readline-sync';
 import consoleStamp from 'console-stamp';
@@ -165,22 +165,22 @@ const withdrawToBSC = async(toAddress, privateKey) => {
     
     for (let i = 0; i < wallet.length; i++) {
         try {
-            console.log(chalk.blue(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`));
+            console.log(chalk.blue(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | SubWallet CEX ${i+1}: ${walletCEX[i]}`));
             logger.log(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`);
         } catch (err) { throw new Error('Add Private keys or SubWallets in file!') };
 
         if (index == 0) {
-            await withdrawToEthereum(wallet[i]);
+            await withdrawToEthereum(walletCEX[i], wallet[i]);
         } else if (index == 1) {
-            await withdrawToArbitrum(wallet[i]);
+            await withdrawToArbitrum(walletCEX[i], wallet[i]);
         } else if (index == 2) {
-            await withdrawToOptimism(wallet[i]);
+            await withdrawToOptimism(walletCEX[i], wallet[i]);
         } else if (index == 3) {
-            await withdrawToAvalanche(wallet[i]);
+            await withdrawToAvalanche(walletCEX[i], wallet[i]);
         } else if (index == 4) {
-            await withdrawToPolygon(wallet[i]);
+            await withdrawToPolygon(walletCEX[i], wallet[i]);
         } else if (index == 5) {
-            await withdrawToBSC(wallet[i]);
+            await withdrawToBSC(walletCEX[i], wallet[i]);
         }
 
         await timeout(pauseWalletTime);
