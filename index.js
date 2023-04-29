@@ -71,7 +71,7 @@ const withdrawToOptimism = async(toAddress, privateKey) => {
                 await getGasPrice(info.rpcEthereum).then(async(gasPriceETH) => {
                     gasPriceOP = (parseFloat(multiply(gasPriceOP, 1.2)).toFixed(5)).toString();
                     gasPriceETH = (parseFloat(multiply(gasPriceOP, 1.5)).toFixed(5)).toString();
-                    amountETH = parseInt(multiply(subtract(amountETH, 21000 * multiply(gasPriceOP, 10**9), 6000 * multiply(gasPriceETH * 10**9)), random));
+                    amountETH = parseInt(multiply(subtract(subtract(amountETH, 21000 * multiply(gasPriceOP, 10**9)), 6000 * multiply(gasPriceETH, 10**9)), random));
                     await sendEVMTX(info.rpcOptimism, 0, 21000, toAddress, amountETH, null, privateKey, gasPriceOP);
                     console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Optimism`));
                     logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Optimism`);
