@@ -49,8 +49,8 @@ const withdrawToArbitrum = async(toAddress, privateKey) => {
         await getETHAmount(info.rpcArbitrum, address).then(async(amountETH) => {
             await getGasPrice(info.rpcArbitrum).then(async(gasPrice) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
-                amountETH = parseInt(multiply(subtract(amountETH, 1100000 * multiply(gasPrice, 10**9)), random));
-                await sendEVMTX(info.rpcArbitrum, 2, generateRandomAmount(900000, 1100000, 0), toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
+                amountETH = parseInt(multiply(subtract(amountETH, 4000000 * multiply(gasPrice, 10**9)), random));
+                await sendEVMTX(info.rpcArbitrum, 2, generateRandomAmount(3200000, 4000000, 0), toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
                 console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Arbitrum`));
                 logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Arbitrum`);
             });
