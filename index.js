@@ -29,16 +29,16 @@ const withdrawToEthereum = async(toAddress, privateKey) => {
         await getETHAmount(info.rpcEthereum, address).then(async(amountETH) => {
             await getGasPrice(info.rpcEthereum).then(async(gasPrice) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
-                amountETH = parseInt(multiply(subtract(res, 21010 * multiply(add(gasPrice, '1.5'), 10**9)), random));
+                amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(add(gasPrice, '1.5'), 10**9)), random));
                 await sendEVMTX(info.rpcEthereum, 2, 21000, toAddress, amountETH, null, privateKey, gasPrice, '1.5');
                 console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Ethereum`));
                 logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Ethereum`);
             });
         });
     } catch (err) {
-        logger.log(err.message);
+        logger.log(err);
         console.log(err.message);
-        await timeout(pauseTime);
+        return;
     }
 }
 
@@ -56,7 +56,7 @@ const withdrawToArbitrum = async(toAddress, privateKey) => {
             });
         });
     } catch (err) {
-        logger.log(err.message);
+        logger.log(err);
         console.log(err.message);
         return;
     }
