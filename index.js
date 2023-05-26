@@ -167,7 +167,8 @@ const withdrawToBSC = async(toAddress, privateKey) => {
         try {
             console.log(chalk.blue(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | SubWallet CEX ${i+1}: ${walletCEX[i]}`));
             logger.log(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`);
-        } catch (err) { throw new Error('Add Private keys or SubWallets in file!') };
+            if (!walletCEX[i]) { throw new Error('Add Wallets in SubWallets in file!'); }
+        } catch (err) { throw new Error('Add Private keys in file!'); }
 
         if (index == 0) {
             await withdrawToEthereum(walletCEX[i], wallet[i]);
