@@ -135,8 +135,28 @@ const withdrawToBSC = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice, 10**9)), random));
                 await sendEVMTX(info.rpcBSC, 0, 21000, toAddress, amountETH, null, privateKey, gasPrice);
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}BNB to ${toAddress} Arbitrum`));
-                logger.log(`Send ${amountETH / 10**18}BNB to ${toAddress} Arbitrum`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18}BNB to ${toAddress} BSC`));
+                logger.log(`Send ${amountETH / 10**18}BNB to ${toAddress} BSC`);
+            });
+        });
+    } catch (err) {
+        logger.log(err);
+        console.log(err.message);
+        return;
+    }
+}
+
+const withdrawToFantom = async(toAddress, privateKey) => {
+    const address = privateToAddress(privateKey);
+
+    try {
+        await getETHAmount(info.rpcFantom, address).then(async(amountETH) => {
+            await getGasPrice(info.rpcFantom).then(async(gasPrice) => {
+                gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
+                amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice, 10**9)), random));
+                await sendEVMTX(info.rpcFantom, 0, 21000, toAddress, amountETH, null, privateKey, gasPrice);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18}FTM to ${toAddress} Fantom`));
+                logger.log(`Send ${amountETH / 10**18}FTM to ${toAddress} Fantom`);
             });
         });
     } catch (err) {
@@ -155,7 +175,8 @@ const withdrawToBSC = async(toAddress, privateKey) => {
         'Withdraw OPTIMISM',
         'Withdraw AVALANCHE',
         'Withdraw POLYGON',
-        'Withdraw BSC'
+        'Withdraw BSC',
+        'Withdraw FANTOM',
     ];
 
     const index = readline.keyInSelect(allStage, 'Choose stage!');
@@ -182,6 +203,8 @@ const withdrawToBSC = async(toAddress, privateKey) => {
             await withdrawToPolygon(walletCEX[i], wallet[i]);
         } else if (index == 5) {
             await withdrawToBSC(walletCEX[i], wallet[i]);
+        } else if (index == 6) {
+            await withdrawToFantom(walletCEX[i], wallet[i]);
         }
 
         await timeout(pauseWalletTime);

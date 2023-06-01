@@ -8,12 +8,14 @@ export const info = {
     rpcPolygon: 'https://polygon.llamarpc.com',
     rpcAvalanche: 'https://rpc.ankr.com/avalanche',
     rpcBSC: 'https://bsc.publicnode.com',
+    rpcFantom: 'https://1rpc.io/ftm',
     explorerEthereum: 'https://etherscan.io/tx/',
     explorerArbitrum: 'https://arbiscan.io/tx/',
     explorerOptimism: 'https://optimistic.etherscan.io/tx/',
     explorerPolygon: 'https://polygonscan.com/tx/',
     explorerAvalanche: 'https://snowtrace.io/tx/',
     explorerBSC: 'https://bscscan.com/tx/',
+    explorerFantom: 'https://ftmscan.com/tx/',
 }
 
 export const timeout = ms => new Promise(res => setTimeout(res, ms));
