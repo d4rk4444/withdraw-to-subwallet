@@ -9,6 +9,8 @@ export const info = {
     rpcAvalanche: 'https://rpc.ankr.com/avalanche',
     rpcBSC: 'https://bsc.publicnode.com',
     rpcFantom: 'https://1rpc.io/ftm',
+    rpcCore: 'https://rpc.coredao.org',
+    rpcHarmony: 'https://rpc.ankr.com/harmony',
     explorerEthereum: 'https://etherscan.io/tx/',
     explorerArbitrum: 'https://arbiscan.io/tx/',
     explorerOptimism: 'https://optimistic.etherscan.io/tx/',
@@ -16,6 +18,8 @@ export const info = {
     explorerAvalanche: 'https://snowtrace.io/tx/',
     explorerBSC: 'https://bscscan.com/tx/',
     explorerFantom: 'https://ftmscan.com/tx/',
+    explorerCore: 'https://scan.coredao.org/tx/',
+    explorerHarmony: 'https://scan.coredao.org/tx/',
 }
 
 export const timeout = ms => new Promise(res => setTimeout(res, ms));

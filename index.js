@@ -166,6 +166,29 @@ const withdrawToFantom = async(toAddress, privateKey) => {
     }
 }
 
+const withdrawToChainBase = async(chain, toAddress, privateKey) => {
+    const address = privateToAddress(privateKey);
+
+    const rpc = info['rpc' + chain];
+    const typeTX = chain == 'Polygon' || chain == 'Ethereum' ? 2 : 0;
+
+    try {
+        await getETHAmount(rpc, address).then(async(amountETH) => {
+            await getGasPrice(rpc).then(async(gasPrice) => {
+                gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(6)).toString();
+                amountETH = parseInt(multiply(subtract(amountETH, 21001 * multiply(gasPrice, 10**9)), random));
+                await sendEVMTX(rpc, typeTX, 21000, toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
+                console.log(chalk.yellow(`${chain}. Transfer ${(amountETH/10**18).toFixed(5)} to ${toAddress}`));
+                logger.log(`${chain}. Transfer ${(amountETH/10**18).toFixed(5)} to ${toAddress}`);
+            });
+        });
+    } catch (err) {
+        logger.log(err);
+        console.log(err.message);
+        return;
+    }
+}
+
 (async() => {
     const wallet = parseFile('private.txt');
     const walletCEX = parseFile('subWallet.txt');
@@ -177,6 +200,8 @@ const withdrawToFantom = async(toAddress, privateKey) => {
         'Withdraw POLYGON',
         'Withdraw BSC',
         'Withdraw FANTOM',
+        'Withdraw CORE',
+        'Withdraw HARMONY',
     ];
 
     const index = readline.keyInSelect(allStage, 'Choose stage!');
@@ -205,6 +230,10 @@ const withdrawToFantom = async(toAddress, privateKey) => {
             await withdrawToBSC(walletCEX[i], wallet[i]);
         } else if (index == 6) {
             await withdrawToFantom(walletCEX[i], wallet[i]);
+        } else if (index == 7) {
+            await withdrawToChainBase('Core', walletCEX[i], wallet[i]);
+        } else if (index == 8) {
+            await withdrawToChainBase('Harmony', walletCEX[i], wallet[i]);
         }
 
         await timeout(pauseWalletTime);
