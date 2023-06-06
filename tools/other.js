@@ -19,7 +19,7 @@ export const info = {
     explorerBSC: 'https://bscscan.com/tx/',
     explorerFantom: 'https://ftmscan.com/tx/',
     explorerCore: 'https://scan.coredao.org/tx/',
-    explorerHarmony: 'https://scan.coredao.org/tx/',
+    explorerHarmony: 'https://explorer.harmony.one/tx/',
 }
 
 export const timeout = ms => new Promise(res => setTimeout(res, ms));
