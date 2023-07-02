@@ -31,8 +31,8 @@ const withdrawToEthereum = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(add(gasPrice, '1.5'), 10**9)), random));
                 await sendEVMTX(info.rpcEthereum, 2, 21000, toAddress, amountETH, null, privateKey, gasPrice, '1.5');
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Ethereum`));
-                logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Ethereum`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Ethereum`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} Ethereum`);
             });
         });
     } catch (err) {
@@ -51,8 +51,8 @@ const withdrawToArbitrum = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 4000000 * multiply(gasPrice, 10**9)), random));
                 await sendEVMTX(info.rpcArbitrum, 2, generateRandomAmount(3200000, 4000000, 0), toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Arbitrum`));
-                logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Arbitrum`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Arbitrum`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} Arbitrum`);
             });
         });
     } catch (err) {
@@ -73,8 +73,8 @@ const withdrawToOptimism = async(toAddress, privateKey) => {
                     gasPriceETH = (parseFloat(multiply(gasPriceOP, 1.5)).toFixed(5)).toString();
                     amountETH = parseInt(multiply(subtract(subtract(amountETH, 21000 * multiply(gasPriceOP, 10**9)), 6000 * multiply(gasPriceETH, 10**9)), random));
                     await sendEVMTX(info.rpcOptimism, 0, 21000, toAddress, amountETH, null, privateKey, gasPriceOP);
-                    console.log(chalk.yellow(`Send ${amountETH / 10**18}ETH to ${toAddress} Optimism`));
-                    logger.log(`Send ${amountETH / 10**18}ETH to ${toAddress} Optimism`);
+                    console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Optimism`));
+                    logger.log(`Send ${amountETH / 10**18} to ${toAddress} Optimism`);
                 });
             });
         });
@@ -95,8 +95,8 @@ const withdrawToAvalanche = async(toAddress, privateKey) => {
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice, 10**9)), random));
                 await sendEVMTX(info.rpcAvalanche, 0, 21000, toAddress, amountETH, null, privateKey, gasPrice);
                 
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}AVAX to ${toAddress} Avalanche`));
-                logger.log(`Send ${amountETH / 10**18}AVAX to ${toAddress} Avalanche`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Avalanche`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} Avalanche`);
             });
         });
     } catch (err) {
@@ -115,8 +115,8 @@ const withdrawToPolygon = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice + 50, 10**9)), random));
                 await sendEVMTX(info.rpcPolygon, 2, 21000, toAddress, amountETH, null, privateKey, gasPrice, '50');
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}MATIC to ${toAddress} Polygon`));
-                logger.log(`Send ${amountETH / 10**18}MATIC to ${toAddress} Polygon`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Polygon`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} Polygon`);
             });
         });
     } catch (err) {
@@ -135,8 +135,8 @@ const withdrawToBSC = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice, 10**9)), random));
                 await sendEVMTX(info.rpcBSC, 0, 21000, toAddress, amountETH, null, privateKey, gasPrice);
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}BNB to ${toAddress} BSC`));
-                logger.log(`Send ${amountETH / 10**18}BNB to ${toAddress} BSC`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} BSC`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} BSC`);
             });
         });
     } catch (err) {
@@ -155,8 +155,8 @@ const withdrawToFantom = async(toAddress, privateKey) => {
                 gasPrice = (parseFloat(multiply(gasPrice, 1.2)).toFixed(5)).toString();
                 amountETH = parseInt(multiply(subtract(amountETH, 21010 * multiply(gasPrice, 10**9)), random));
                 await sendEVMTX(info.rpcFantom, 0, 21000, toAddress, amountETH, null, privateKey, gasPrice);
-                console.log(chalk.yellow(`Send ${amountETH / 10**18}FTM to ${toAddress} Fantom`));
-                logger.log(`Send ${amountETH / 10**18}FTM to ${toAddress} Fantom`);
+                console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Fantom`));
+                logger.log(`Send ${amountETH / 10**18} to ${toAddress} Fantom`);
             });
         });
     } catch (err) {
