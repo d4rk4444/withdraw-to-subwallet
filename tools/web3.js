@@ -15,6 +15,16 @@ export const getETHAmount = async(rpc, walletAddress) => {
     return data;
 }
 
+export const toWei = (amount, type) => {
+    const w3 = new Web3();
+    return w3.utils.toWei(amount, type);
+}
+
+export const fromWei = (amount, type) => {
+    const w3 = new Web3();
+    return w3.utils.fromWei(amount, type);
+}
+
 export const sendEVMTX = async(rpc, typeTx, gasLimit, toAddress, value, data, privateKey, maxFeeOrGasPrice, maxPriorityFee) => {
     const w3 = new Web3(new Web3.providers.HttpProvider(rpc));
     const fromAddress = privateToAddress(privateKey);

@@ -3,9 +3,10 @@ import { info,
     parseFile,
     generateRandomAmount,
     privateToAddress } from './tools/other.js';
-import { getETHAmount,
+import { fromWei, getETHAmount,
     getGasPrice,
-    sendEVMTX } from './tools/web3.js';
+    sendEVMTX, 
+    toWei} from './tools/web3.js';
 import { subtract, multiply, divide, add } from 'mathjs';
 import fs from 'fs';
 import readline from 'readline-sync';
@@ -71,7 +72,7 @@ const withdrawToOptimism = async(toAddress, privateKey) => {
                 await getGasPrice(info.rpcEthereum).then(async(gasPriceETH) => {
                     gasPriceOP = (parseFloat(multiply(gasPriceOP, 1.2)).toFixed(5)).toString();
                     gasPriceETH = (parseFloat(multiply(gasPriceOP, 1.5)).toFixed(5)).toString();
-                    amountETH = parseInt(multiply(subtract(subtract(amountETH, 21000 * multiply(gasPriceOP, 10**9)), 6000 * multiply(gasPriceETH, 10**9)), random));
+                    amountETH = parseInt(multiply(subtract(amountETH, add(multiply(toWei(gasPriceOP, 'gwei'), 21000), multiply(toWei(gasPriceETH, 'gwei'), 1400))), random));
                     await sendEVMTX(info.rpcOptimism, 0, 21000, toAddress, amountETH, null, privateKey, gasPriceOP);
                     console.log(chalk.yellow(`Send ${amountETH / 10**18} to ${toAddress} Optimism`));
                     logger.log(`Send ${amountETH / 10**18} to ${toAddress} Optimism`);
