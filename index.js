@@ -70,7 +70,7 @@ const withdrawToOptimism = async(toAddress, privateKey) => {
         await getETHAmount(info.rpcOptimism, address).then(async(amountETH) => {
             await getGasPrice(info.rpcOptimism).then(async(gasPriceOP) => {
                 await getGasPrice(info.rpcEthereum).then(async(gasPriceETH) => {
-                    gasPriceOP = (parseFloat(multiply(gasPriceOP, 1.2)).toFixed(5)).toString();
+                    gasPriceOP = (parseFloat(multiply(gasPriceOP, 1.2)).toFixed(9)).toString();
                     gasPriceETH = (parseFloat(multiply(gasPriceOP, 1.5)).toFixed(5)).toString();
                     amountETH = parseInt(multiply(subtract(amountETH, add(multiply(toWei(gasPriceOP, 'gwei'), 21000), multiply(toWei(gasPriceETH, 'gwei'), 1400))), random));
                     await sendEVMTX(info.rpcOptimism, 0, 21000, toAddress, amountETH, null, privateKey, gasPriceOP);
