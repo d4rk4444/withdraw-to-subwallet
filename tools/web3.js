@@ -9,6 +9,24 @@ export const getGasPrice = async(rpcProvider) => {
     return gasPriceInGwei;
 }
 
+export const getEstimateGas = async(rpc, data, value, addressFrom, addressTo) => {
+    const w3 = new Web3(new Web3.providers.HttpProvider(rpc));
+    return w3.eth.estimateGas({ data: data, value: w3.utils.numberToHex(value), from: addressFrom, to: addressTo });
+}
+
+export const getPriorityGasPrice = async(rpc) => {
+    const w3 = new Web3(new Web3.providers.HttpProvider(rpc));
+    const latestBlock = await w3.eth.getBlock('latest', true);
+
+    for (let i = latestBlock.transactions.length - 1; i >= 0; i--) {
+        const transaction = latestBlock.transactions[i];
+
+        if (transaction.maxFeePerGas) {
+            return transaction.maxFeePerGas;
+        }
+    }
+}
+
 export const getETHAmount = async(rpc, walletAddress) => {
     const w3 = new Web3(new Web3.providers.HttpProvider(rpc));
     const data = await w3.eth.getBalance(walletAddress);

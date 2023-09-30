@@ -1,5 +1,21 @@
 import Web3 from 'web3';
 import fs from 'fs';
+import consoleStamp from 'console-stamp';
+import chalk from 'chalk';
+
+export const log = (type, msg, color) => {
+    const output = fs.createWriteStream(`history.log`, { flags: 'a' });
+    const logger = new console.Console(output);
+    consoleStamp(console, { format: ':date(HH:MM:ss) :label' });
+    consoleStamp(logger, { format: ':date(yyyy/mm/dd HH:MM:ss) :label', stdout: output });
+
+    if (!color) {
+        console[type](msg);
+    } else {
+        console[type](chalk[color](msg));
+    }
+    logger[type](msg);
+}
 
 export const info = {
     rpcEthereum: 'https://eth.llamarpc.com',
@@ -11,6 +27,8 @@ export const info = {
     rpcFantom: 'https://1rpc.io/ftm',
     rpcCore: 'https://rpc.coredao.org',
     rpcHarmony: 'https://rpc.ankr.com/harmony',
+    rpczkSync: 'https://zksync.drpc.org',
+    rpcLinea: 'https://linea.drpc.org',
     explorerEthereum: 'https://etherscan.io/tx/',
     explorerArbitrum: 'https://arbiscan.io/tx/',
     explorerOptimism: 'https://optimistic.etherscan.io/tx/',
@@ -20,6 +38,8 @@ export const info = {
     explorerFantom: 'https://ftmscan.com/tx/',
     explorerCore: 'https://scan.coredao.org/tx/',
     explorerHarmony: 'https://explorer.harmony.one/tx/',
+    explorerzkSync: 'https://explorer.zksync.io/tx/',
+    explorerLinea: 'https://lineascan.build/tx/',
 }
 
 export const timeout = ms => new Promise(res => setTimeout(res, ms));
