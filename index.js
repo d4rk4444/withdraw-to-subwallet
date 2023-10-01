@@ -8,15 +8,15 @@ import { fromWei, getETHAmount,
     getEstimateGas,
     getGasPrice,
     getPriorityGasPrice,
+    numberToHex,
     sendEVMTX, 
     toWei} from './tools/web3.js';
+import { dataTransferETH, estimateMsgFee, getAmountTokenStark, privateToStarknetAddress, sendTransactionStarknet } from './tools/starknet.js';
 import { subtract, multiply, add } from 'mathjs';
 import fs from 'fs';
 import readline from 'readline-sync';
 import consoleStamp from 'console-stamp';
 import chalk from 'chalk';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const output = fs.createWriteStream(`history.log`, { flags: 'a' });
 const logger = new console.Console(output);
@@ -24,7 +24,7 @@ consoleStamp(console, { format: ':date(HH:MM:ss)' });
 consoleStamp(logger, { format: ':date(yyyy/mm/dd HH:MM:ss)', stdout: output });
 
 const pauseWalletTime = generateRandomAmount(process.env.TIMEOUT_WALLET_SEC_MIN * 1000, process.env.TIMEOUT_WALLET_SEC_MAX * 1000, 0);
-const random = generateRandomAmount(process.env.PERCENT_TRANSFER_MIN / 100, process.env.PERCENT_TRANSFER_MAX / 100, 3);
+const random = info.random;
 
 const withdrawToChain = async(chain, toAddress, privateKey) => {
     const address = privateToAddress(privateKey);
@@ -53,11 +53,34 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
 
                 await sendEVMTX(rpc, typeTX, gasLimit, toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
 
-                log('info', `${chain}. Transfer ${parseFloat(fromWei(amountETH, 'ether')).toFixed(5)} to ${toAddress}`, 'yellow');
+                log('info', `${chain}. Transfer ${parseFloat(fromWei(numberToHex(amountETH), 'ether')).toFixed(5)} to ${toAddress}`, 'yellow');
             });
         });
     } catch (err) {
-        log('log', err.message);
+        log('log', err);
+        return;
+    }
+}
+
+const withdrawToStarknet = async(toAddress, privateKey) => {
+    const rpc = info.rpcStarknet;
+    const address = await privateToStarknetAddress(privateKey);
+
+    try {
+        await getAmountTokenStark(rpc, address, info.Starknet.ETH, info.Starknet.ETHAbi).then(async(amountETH) => {
+            await dataTransferETH(toAddress, amountETH).then(async(res) => {
+                await estimateMsgFee(rpc, res, privateKey).then(async(estimateFee) => {
+                    amountETH = parseInt(multiply(subtract(amountETH, estimateFee), random));
+
+                    await dataTransferETH(toAddress, amountETH).then(async(res) => {
+                        await sendTransactionStarknet(rpc, res, privateKey);
+                    });
+                    log('info', `Starknet. Transfer ${parseFloat(fromWei(numberToHex(amountETH), 'ether')).toFixed(5)} to ${toAddress}`, 'yellow');
+                });
+            });
+        });
+    } catch (err) {
+        log('log', err);
         return;
     }
 }
@@ -76,6 +99,7 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
         'Withdraw CORE',
         'Withdraw HARMONY',
         'Withdraw ZKSYNC',
+        'Withdraw STARKNET',
     ];
 
     const index = readline.keyInSelect(allStage, 'Choose stage!');
@@ -85,8 +109,7 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
     
     for (let i = 0; i < wallet.length; i++) {
         try {
-            console.log(chalk.blue(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | SubWallet CEX ${i+1}: ${walletCEX[i]}`));
-            logger.log(`Wallet ${i+1}: ${privateToAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`);
+            log('info', `Wallet ${i+1}: ${privateToAddress(wallet[i])} or ${await privateToStarknetAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`, 'blue');
             if (!walletCEX[i]) { throw new Error('Add Wallets in SubWallets in file!'); }
         } catch (err) { throw new Error('Add Private keys in file!'); }
 
@@ -110,6 +133,8 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
             await withdrawToChain('Harmony', walletCEX[i], wallet[i]);
         } else if (index == 9) {
             await withdrawToChain('zkSync', walletCEX[i], wallet[i]);
+        } else if (index == 10) {
+            await withdrawToStarknet(walletCEX[i], wallet[i]);
         }
 
         await timeout(pauseWalletTime);

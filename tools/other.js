@@ -2,6 +2,8 @@ import Web3 from 'web3';
 import fs from 'fs';
 import consoleStamp from 'console-stamp';
 import chalk from 'chalk';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const log = (type, msg, color) => {
     const output = fs.createWriteStream(`history.log`, { flags: 'a' });
@@ -17,6 +19,11 @@ export const log = (type, msg, color) => {
     logger[type](msg);
 }
 
+export const generateRandomAmount = (min, max, num) => {
+    const amount = Number(Math.random() * (parseFloat(max) - parseFloat(min)) + parseFloat(min));
+    return Number(parseFloat(amount).toFixed(num));
+}
+
 export const info = {
     rpcEthereum: 'https://eth.llamarpc.com',
     rpcArbitrum: 'https://rpc.ankr.com/arbitrum',
@@ -29,6 +36,7 @@ export const info = {
     rpcHarmony: 'https://rpc.ankr.com/harmony',
     rpczkSync: 'https://zksync.drpc.org',
     rpcLinea: 'https://linea.drpc.org',
+    rpcStarknet: process.env.Starknet_RPC,
     explorerEthereum: 'https://etherscan.io/tx/',
     explorerArbitrum: 'https://arbiscan.io/tx/',
     explorerOptimism: 'https://optimistic.etherscan.io/tx/',
@@ -40,14 +48,16 @@ export const info = {
     explorerHarmony: 'https://explorer.harmony.one/tx/',
     explorerzkSync: 'https://explorer.zksync.io/tx/',
     explorerLinea: 'https://lineascan.build/tx/',
+    explorerStarknet: 'https://voyager.online/tx/',
+    Starknet: {
+        ETH: '0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7',
+        ETHAbi: '0x48624e084dc68d82076582219c7ed8cb0910c01746cca3cd72a28ecfe07e42d',
+    },
+    random: generateRandomAmount(process.env.PERCENT_TRANSFER_MIN / 100, process.env.PERCENT_TRANSFER_MAX / 100, 3),
+    argentVersion: process.env.ARGENT_CREATE_VERSION,
 }
 
 export const timeout = ms => new Promise(res => setTimeout(res, ms));
-
-export const generateRandomAmount = (min, max, num) => {
-    const amount = Number(Math.random() * (parseFloat(max) - parseFloat(min)) + parseFloat(min));
-    return Number(parseFloat(amount).toFixed(num));
-}
 
 export const parseFile = (file) => {
     const data = fs.readFileSync(file, "utf-8");
