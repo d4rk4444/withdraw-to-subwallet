@@ -109,7 +109,12 @@ const withdrawToStarknet = async(toAddress, privateKey) => {
     
     for (let i = 0; i < wallet.length; i++) {
         try {
-            log('info', `Wallet ${i+1}: ${privateToAddress(wallet[i])} or ${await privateToStarknetAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`, 'blue');
+            if (i != 10) {
+                log('info', `Wallet ${i+1}: ${privateToAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`, 'blue');
+            } else {
+                log('info', `Wallet ${i+1}: ${await privateToStarknetAddress(wallet[i])} | Subwallet CEX ${i+1}: ${walletCEX[i]}`, 'blue');
+            }
+            
             if (!walletCEX[i]) { throw new Error('Add Wallets in SubWallets in file!'); }
         } catch (err) { console.log(err) } //throw new Error('Add Private keys in file!'); }
 
