@@ -39,7 +39,7 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
                 gasPrice = (parseFloat(gasPrice).toFixed(9)).toString();
                 const priorityMaxFee = typeTX == 2 ? await getPriorityGasPrice(rpc) : 0;
                 const gasLimit = chain == 'Arbitrum' || chain == 'zkSync'
-                    ? await getEstimateGas(rpc, '0x', toWei('0.1', 'ether'), address, toAddress)
+                    ? await getEstimateGas(rpc, '0x', toWei('0.001', 'ether'), address, toAddress)
                     : 21000;
                 if (chain == 'Optimism') {
                     let gasPriceOP = parseFloat(await getGasPrice(rpc)).toFixed(9).toString();
