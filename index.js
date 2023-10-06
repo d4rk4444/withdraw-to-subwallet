@@ -48,7 +48,7 @@ const withdrawToChain = async(chain, toAddress, privateKey) => {
                 } else {
                     amountETH = typeTX == 0
                         ? parseInt(multiply(subtract(amountETH, gasLimit * toWei(gasPrice, 'gwei')), random))
-                        : parseInt(multiply(subtract(amountETH, gasLimit * toWei(gasPrice + priorityMaxFee, 'gwei')), random));
+                        : parseInt(multiply(subtract(amountETH, gasLimit * toWei(parseFloat(gasPrice + priorityMaxFee).toFixed(6), 'gwei')), random));
                 }
 
                 await sendEVMTX(rpc, typeTX, gasLimit, toAddress, amountETH, null, privateKey, gasPrice, gasPrice);
